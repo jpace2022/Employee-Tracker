@@ -4,9 +4,6 @@ CREATE DATABASE department_db;
 
 USE department_db;
 
-DROP TABLE IF EXISTS role;
-DROP TABLE IF EXISTS employee;
-
 
 
 CREATE TABLE department (
