@@ -86,7 +86,7 @@ function addDepartment() {
 }
 
 function addRole(){
-    return.inquirer.prompt([
+    return inquirer.prompt([
         {
             type: "input",
             name: "title",
@@ -114,6 +114,54 @@ function addRole(){
 
 }
 
+function addEmployee() {
+    return inquirer.prompt([
+        {
+            type: "input",
+            name: "last_name",
+            message: "Enter Last Name."
+        },
+        {
+            type: "input",
+            name: "role_id",
+            message: "Enter Role ID."
+        },
+        {
+            type: "input",
+            name: "manager_id",
+            message: "Enter Manager ID."
+        }
+
+    ])
+    .then(function(userChoice){
+        const sql= `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)`
+        db.query(sql, [userChoice.first_name, userChoice.last_name, userChoice.role_id, userChoice.manager_id], function(err, results){
+            console.log("Employee added to database.")
+            menu()
+        })
+    })
+}
+
+function updateRole(){
+    return inquirer.prompt([
+        {
+            type: "input",
+            name: "id",
+            message: "Enter Employee ID."
+        },
+        {
+            type: "input",
+            name: "role_id",
+            message: "Enter Updated Role ID."
+        }
+    ])
+    .then(function(userChoice){
+        const sql= `UPDATE employee SET role_id=? WHERE id=?`
+        db.query(sql,[userChoice.role_id, userChoice.id], function(err, results){
+            console.log("Role updated.")
+        })
+    })
+}
 
 
 menu()
