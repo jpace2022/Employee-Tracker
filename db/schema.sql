@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS department_db;
+DROP DATABASE IF EXISTS department_db;
 
 CREATE DATABASE department_db;
 
@@ -23,6 +23,6 @@ CREATE TABLE employee (
     last_name VARCHAR(30) NOT NULL,
     role_id INTEGER NOT NULL,
     manager_id INTEGER,
-    FOREIGN KEY (role_id) REFERENCES role(id),
+    CONSTRAINT fk_role FOREIGN KEY (role_id) REFERENCES role(id),
     FOREIGN KEY (manager_id) REFERENCES employee(id)
 );
