@@ -18,7 +18,7 @@ function menu() {
             "Add role",
             "Add employee",
             "Update roles",
-            "Leave?"]
+            "Leave"]
         }
     ])
 
@@ -139,6 +139,11 @@ function addEmployee() {
     inquirer.prompt([
         {
             type: "input",
+            name: "first_name",
+            message: "Enter first Name."
+        },
+        {
+            type: "input",
             name: "last_name",
             message: "Enter Last Name."
         },
@@ -168,10 +173,10 @@ function addEmployee() {
 
 function updateRole(){
     console.log("update role")
-    inquirer.prompt([
+    return inquirer.prompt([
         {
             type: "input",
-            name: "id",
+            name: "employee",
             message: "Enter Employee ID."
         },
         {
@@ -189,19 +194,6 @@ function updateRole(){
     })
 }
 function Leave(){
-    console.log("Bye")
-    inquirer.prompt([
-        {
-            type: "input",
-            name: "id",
-            message: "Enter Employee ID."
-        },
-        {
-            type: "input",
-            name: "role_id",
-            message: "Enter Updated Role ID."
-        }
-    ])
     .then(function(userChoice){
             console.log("BYE!")
             menu()
