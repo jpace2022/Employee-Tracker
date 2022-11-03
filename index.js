@@ -46,8 +46,9 @@ function menu() {
         }
         if (userChoice.title==="Leave"){
             console.log("Bye")
+            return;
         }
-    })
+    });
 }
 
 function viewDept(){
@@ -193,13 +194,6 @@ function updateRole(){
         })
     })
 }
-function Leave(){
-    .then(function(userChoice){
-            console.log("BYE!")
-            menu()
-        })
-    }
-
 
 
 menu()
