@@ -1,54 +1,50 @@
 const inquirer = require("inquirer");
 const cTable = require("console.table");
-// Import and require mysql2
+const db = require("./db/connect")
 const mysql = require('mysql2');
 
-// Connect to database
-const db = mysql.createConnection(
-   {
-     host: 'localhost',
-     // MySQL username,
-     user: 'root',
-     // MySQL password
-     password: 'password',
-     database: 'department_db'
-   },
-   console.log(`Connected to the department_db database.`)
- );
 
 function menu() {
-    return inquirer.createPromptModule([
+    return inquirer.prompt([
         {
             type: "list",
             name: "title",
             message: "How would you like to proceed?",
-            choices: ["View departments?", "View roles?", "View employees?", "Add department?", "Add role?", "Add employee?", "Update roles?", "Leave?"]
+            choices: 
+            ["View departments",
+            "View roles", 
+            "View employees",
+            "Add department",
+            "Add role",
+            "Add employee",
+            "Update roles",
+            "Leave?"]
         }
     ])
 
     .then(function(userChoice){
-        if (userChoice.title==="View departments?"){
+        if (userChoice.title==="View departments"){
             viewDept()
         }
-        if (userChoice.title==="View roles?"){
-            viewDept()
+        if (userChoice.title==="View roles"){
+            viewRoles()
         }
-        if (userChoice.title==="View employees?"){
-            viewDept()
+        if (userChoice.title==="View employees"){
+           viewEmployees()
         }
-        if (userChoice.title==="Add deparment?"){
-            viewDept()
+        if (userChoice.title==="Add department"){
+            addDepartment()
         }
-        if (userChoice.title==="Add role?"){
-            viewDept()
+        if (userChoice.title==="Add role"){
+            addRole()
         }
-        if (userChoice.title==="Add employee?"){
-            viewDept()
+        if (userChoice.title==="Add employee"){
+            addEmployee()
         }
-        if (userChoice.title==="Update roles?"){
-            viewDept()
+        if (userChoice.title==="Update roles"){
+            updateRole()
         }
-        if (userChoice.title==="Leave?"){
+        if (userChoice.title==="Leave"){
             console.log("Bye")
         }
     })
@@ -58,6 +54,19 @@ function viewDept(){
     const sql = `SELECT * FROM department`
 
     db.query(sql, function(err, results){
+        console.table(results)
+        menu()
+    })
+    
+}
+
+function viewRoles() {
+    const sql = `SELECT * FROM role`
+    console.log("viewroles")
+    db.query(sql, function(err, results){
+        if (err) {
+            console.log(err)
+        }
         console.table(results)
         menu()
     })
@@ -73,16 +82,9 @@ function viewEmployees(){
 }
 
 
-function viewRoles() {
-    const sql = `SELECT * FROM role`
-
-    db.query(sql, function(err, results){
-        console.table(results)
-    })
-}
-
 function addDepartment() {
-    return inquirer.prompt([
+    console.log("adddept")
+    inquirer.prompt([
         {
             type: "input",
             name: "Dept_name",
@@ -100,7 +102,8 @@ function addDepartment() {
 }
 
 function addRole(){
-    return inquirer.prompt([
+    console.log("addrole")
+    inquirer.prompt([
         {
             type: "input",
             name: "title",
@@ -118,9 +121,12 @@ function addRole(){
         },
     ])
     .then(function(userChoice) {
-        const sql = `INSERT INTO role (title, salary, department_id) VAULUES(?,?,?)`
+        const sql = `INSERT INTO role (title, salary, department_id) VALUES(?,?,?)`
 
         db.query(sql, [userChoice.title,userChoice.salary,userChoice.department_id], function(err, results){
+            if (err) {
+                console.log(err)
+            }
             console.log("Role added to database.")
             menu()
         })
@@ -129,7 +135,8 @@ function addRole(){
 }
 
 function addEmployee() {
-    return inquirer.prompt([
+    console.log("addemployee")
+    inquirer.prompt([
         {
             type: "input",
             name: "last_name",
@@ -150,6 +157,9 @@ function addEmployee() {
     .then(function(userChoice){
         const sql= `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)`
         db.query(sql, [userChoice.first_name, userChoice.last_name, userChoice.role_id, userChoice.manager_id], function(err, results){
+            if (err) {
+                console.log(err)
+            }
             console.log("Employee added to database.")
             menu()
         })
@@ -157,7 +167,8 @@ function addEmployee() {
 }
 
 function updateRole(){
-    return inquirer.prompt([
+    console.log("update role")
+    inquirer.prompt([
         {
             type: "input",
             name: "id",
@@ -173,9 +184,30 @@ function updateRole(){
         const sql= `UPDATE employee SET role_id=? WHERE id=?`
         db.query(sql,[userChoice.role_id, userChoice.id], function(err, results){
             console.log("Role updated.")
+            menu()
         })
     })
 }
+function Leave(){
+    console.log("Bye")
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "id",
+            message: "Enter Employee ID."
+        },
+        {
+            type: "input",
+            name: "role_id",
+            message: "Enter Updated Role ID."
+        }
+    ])
+    .then(function(userChoice){
+            console.log("BYE!")
+            menu()
+        })
+    }
+
 
 
 menu()
